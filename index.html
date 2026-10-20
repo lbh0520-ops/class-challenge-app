@@ -42,7 +42,6 @@
             </div>
         </div>
     </header>
-
     <!-- Main Content Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <!-- 1. Milestone Trackers -->
@@ -86,7 +85,6 @@
                 </div>
             </section>
         </div>
-
         <!-- 2. Goal Completers Hall of Fame -->
         <section class="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-red-500/10 rounded-2xl p-6 border border-amber-200/60">
             <div class="flex items-center gap-2 mb-4">
@@ -97,7 +95,6 @@
                 <p class="text-xs text-slate-500 py-2">아직 목표를 완주한 학생이 없습니다. 첫 번째 주인공에 도전해보세요!</p>
             </div>
         </section>
-
         <!-- 3. Teacher Management Toolbar -->
         <section id="teacherToolbar" class="hidden bg-indigo-50 border border-indigo-200 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
             <div class="flex items-center gap-2 text-indigo-900 font-semibold text-sm">
@@ -124,7 +121,6 @@
                 </button>
             </div>
         </section>
-
         <!-- 4. Student Roster Grid -->
         <section>
             <div class="flex items-center justify-between mb-4">
@@ -136,7 +132,6 @@
             <div id="studentGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
     </main>
-
     <!-- Auth Modal (PIN 번호 입력) -->
     <div id="authModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl space-y-4">
@@ -155,7 +150,6 @@
             </form>
         </div>
     </div>
-
     <!-- Dynamic Reward Goals Modal -->
     <div id="rewardModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-xl space-y-4 max-h-[90vh] flex flex-col">
@@ -175,7 +169,6 @@
             </div>
         </div>
     </div>
-
     <!-- Add/Edit Student Modal -->
     <div id="studentModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl space-y-4">
@@ -203,27 +196,23 @@
             </form>
         </div>
     </div>
-
     <script>
         let isTeacherMode = false;
         let studentData = [];
         let workoutGoals = [];
         let readingGoals = [];
         let teacherPin = "1234"; // 기본 교사 비밀번호
-
         const STORAGE_KEYS = {
             STUDENTS: 'class_challenge_students',
             WORKOUT_GOALS: 'class_challenge_workout_goals',
             READING_GOALS: 'class_challenge_reading_goals',
             TEACHER_PIN: 'class_challenge_teacher_pin'
         };
-
         // 앱 켜질 때 초기화
         window.addEventListener('DOMContentLoaded', () => {
             initLocalStorageData();
             fetchData();
         });
-
         // 로컬스토리지 초기 데이터 세팅
         function initLocalStorageData() {
             if (!localStorage.getItem(STORAGE_KEYS.TEACHER_PIN)) {
@@ -231,7 +220,6 @@
             } else {
                 teacherPin = localStorage.getItem(STORAGE_KEYS.TEACHER_PIN);
             }
-
             if (!localStorage.getItem(STORAGE_KEYS.WORKOUT_GOALS)) {
                 const defaultWorkoutGoals = [
                     { rate: 25, icon: "🍦", reward: "아이스크림 데이" },
@@ -241,7 +229,6 @@
                 ];
                 localStorage.setItem(STORAGE_KEYS.WORKOUT_GOALS, JSON.stringify(defaultWorkoutGoals));
             }
-
             if (!localStorage.getItem(STORAGE_KEYS.READING_GOALS)) {
                 const defaultReadingGoals = [
                     { rate: 25, icon: "📖", reward: "배지 증정" },
@@ -251,12 +238,10 @@
                 ];
                 localStorage.setItem(STORAGE_KEYS.READING_GOALS, JSON.stringify(defaultReadingGoals));
             }
-
             if (!localStorage.getItem(STORAGE_KEYS.STUDENTS)) {
                 localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify([]));
             }
         }
-
         function fetchData() {
             try {
                 studentData = JSON.parse(localStorage.getItem(STORAGE_KEYS.STUDENTS)) || [];
@@ -267,19 +252,16 @@
                 alert("데이터 불러오기 오류: " + err.message);
             }
         }
-
         function saveDataToStorage() {
             localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(studentData));
             localStorage.setItem(STORAGE_KEYS.WORKOUT_GOALS, JSON.stringify(workoutGoals));
             localStorage.setItem(STORAGE_KEYS.READING_GOALS, JSON.stringify(readingGoals));
         }
-
         function onDataLoaded() {
             studentData.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
             renderStudents();
             renderClassStats();
         }
-
         // 인증 모달
         function openAuthModal() {
             if (isTeacherMode) {
@@ -308,7 +290,6 @@
                 alert("비밀번호가 올바르지 않습니다.");
             }
         }
-
         function updateAuthUI() {
             const authBtnText = document.getElementById("authBtnText");
             const authStatusBadge = document.getElementById("authStatusBadge");
@@ -336,7 +317,6 @@
             }
             renderStudents();
         }
-
         // 학생 추가/수정
         function openAddStudentModal() {
             document.getElementById("studentModalTitle").innerText = "학생 등록";
@@ -355,7 +335,6 @@
             const name = document.getElementById("modalStudentName").value.trim();
             const workoutGoal = Number(document.getElementById("modalWorkoutGoal").value);
             const readingGoal = Number(document.getElementById("modalReadingGoal").value);
-
             if (id) {
                 const student = studentData.find(s => s.id === id);
                 if (student) {
@@ -374,12 +353,10 @@
                 };
                 studentData.push(newStudent);
             }
-
             saveDataToStorage();
             closeStudentModal();
             onDataLoaded();
         }
-
         function certifyWorkout(id) {
             const student = studentData.find(s => s.id === id);
             if (student) {
@@ -403,7 +380,6 @@
                 onDataLoaded();
             }
         }
-
         // 데이터 백업 (JSON 파일 다운로드)
         function exportBackupData() {
             const backup = {
@@ -420,7 +396,6 @@
             downloadAnchor.click();
             downloadAnchor.remove();
         }
-
         // 데이터 복원 (JSON 파일 업로드)
         function triggerImportData() {
             document.getElementById("jsonFileInput").click();
@@ -449,7 +424,6 @@
             };
             reader.readAsText(file);
         }
-
         // 엑셀 일괄 등록
         function downloadExcelTemplate() {
             const data = [
@@ -509,7 +483,6 @@
             };
             reader.readAsArrayBuffer(file);
         }
-
         // 보상목표 모달
         function openRewardModal(target) {
             document.getElementById("currentRewardTarget").value = target;
@@ -593,12 +566,10 @@
             } else {
                 readingGoals = updatedList;
             }
-
             saveDataToStorage();
             closeRewardModal();
             onDataLoaded();
         }
-
         // 화면 UI 그리기
         function renderStudents() {
             const grid = document.getElementById("studentGrid");
@@ -659,7 +630,6 @@
             });
             if (window.lucide) lucide.createIcons();
         }
-
         function renderClassStats() {
             if (studentData.length === 0) {
                 document.getElementById("workoutClassAvgRate").innerText = `0%`;
@@ -673,7 +643,6 @@
             let sumWorkoutCount = 0, sumWorkoutGoal = 0;
             let sumReadingCount = 0, sumReadingGoal = 0;
             const hallOfFameList = [];
-
             studentData.forEach(student => {
                 sumWorkoutCount += (student.workoutCount || 0);
                 sumWorkoutGoal += (student.workoutGoal || 1);
@@ -685,18 +654,14 @@
                 else if (wRate >= 100) hallOfFameList.push({ name: student.name, badge: "🔥 운동 완주" });
                 else if (rRate >= 100) hallOfFameList.push({ name: student.name, badge: "📚 독서 완주" });
             });
-
             const cumulativeWorkoutRate = sumWorkoutGoal > 0 ? Math.min(100, Math.round((sumWorkoutCount / sumWorkoutGoal) * 100)) : 0;
             const cumulativeReadingRate = sumReadingGoal > 0 ? Math.min(100, Math.round((sumReadingCount / sumReadingGoal) * 100)) : 0;
-
             document.getElementById("workoutClassAvgRate").innerText = `${cumulativeWorkoutRate}%`;
             document.getElementById("workoutProgressBar").style.width = `${cumulativeWorkoutRate}%`;
             renderGoalsGrid("workoutGoalsGrid", workoutGoals, cumulativeWorkoutRate, "orange");
-
             document.getElementById("readingClassAvgRate").innerText = `${cumulativeReadingRate}%`;
             document.getElementById("readingProgressBar").style.width = `${cumulativeReadingRate}%`;
             renderGoalsGrid("readingGoalsGrid", readingGoals, cumulativeReadingRate, "emerald");
-
             const fameContainer = document.getElementById("hallOfFameContainer");
             if (hallOfFameList.length > 0) {
                 fameContainer.innerHTML = hallOfFameList.map(item => `
@@ -709,7 +674,6 @@
                 fameContainer.innerHTML = `<p class="text-xs text-slate-500 py-2">아직 목표를 완주한 학생이 없습니다.</p>`;
             }
         }
-
         function renderGoalsGrid(containerId, goals, currentAvg, themeColor) {
             const container = document.getElementById(containerId);
             container.innerHTML = "";
